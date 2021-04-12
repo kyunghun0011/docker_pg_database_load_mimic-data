@@ -86,36 +86,36 @@ done
 # /docker-entrypoint-initdb.d 경로 안에 있는 테이블 생성 스크립트 실행 
 if [ ${PG_MAJOR:0:1} -eq 1 ]; then
 echo "$0: running postgres_create_tables_pg10.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/create.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
 else
 echo "$0: running postgres_create_tables_pg.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/create.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
 fi
 
 # 테이블 적재 스크립트 실행(csv.gz or csv into table)
 if [ $COMPRESSED -eq 1 ]; then
 echo "$0: running postgres_load_data_gz.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/load_gz.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
 else
 echo "$0: running postgres_load_data.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/load.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
 fi
 
 
 # 테이블 인덱스 생성 스크립트 실행
 echo "$0: running postgres_add_indexes.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/index.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
 
 # 테이블 제약조건 스크립트 실행
 echo "$0: running postgres_add_constraints.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/constraint.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
 
 #######################
 # 이까지 테스트후 밑에 작성 예정 
 
 # # 데이터 제대로 이관됬는지 체크하는 스크립트 실행
 # echo "$0: running postgres_checks.sql (all rows should return PASSED)"
-# psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/mimic-iv-script/postgres/postgres_checks.sql
+# psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/postgres_checks.sql
 # fi
 
 echo 'Done!'
