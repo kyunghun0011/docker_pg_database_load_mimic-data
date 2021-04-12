@@ -110,12 +110,6 @@ psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docke
 echo "$0: running postgres_add_constraints.sql"
 psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
 
-#######################
-# 이까지 테스트후 밑에 작성 예정 
-
-# # 데이터 제대로 이관됬는지 체크하는 스크립트 실행
-# echo "$0: running postgres_checks.sql (all rows should return PASSED)"
-# psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/postgres_checks.sql
-# fi
+fi
 
 echo 'Done!'
