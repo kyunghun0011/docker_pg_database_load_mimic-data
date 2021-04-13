@@ -21,9 +21,9 @@ psql <<- EOSQL
     CREATE DATABASE MIMIC OWNER MIMIC;
     \c mimic;
 
-    CREATE SCHEMA MIMIC_CORE;
-    CREATE SCHEMA MIMIC_HOSP;
-    CREATE SCHEMA MIMIC_ICU;
+    CREATE SCHEMA mimic_core;
+    CREATE SCHEMA mimic_hosp;
+    CREATE SCHEMA mimic_icu;
 EOSQL
 
 ## 파일 확장자 체크(파일 확장자 csv.gz or csv)
