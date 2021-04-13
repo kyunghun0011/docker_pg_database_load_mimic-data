@@ -20,23 +20,20 @@ psql <<- EOSQL
 
     CREATE DATABASE MIMIC OWNER MIMIC;
     \c mimic;
-
-    CREATE SCHEMA MIMIC_CORE;
-    CREATE SCHEMA MIMIC_HOSP;
-    CREATE SCHEMA MIMIC_ICU;
+    
 EOSQL
 
 ## 파일 확장자 체크(파일 확장자 csv.gz or csv)
 # check for the admissions to set the extension
-if [ -e "/mimic_data/core/admissions.csv.gz" ]; then
+if [ -e "/mimic_data_core/admissions.csv.gz" ]; then
   COMPRESSED=1
   EXT='.csv.gz'
-elif [ -e "/mimic_data/core/admissions.csv" ]; then
+elif [ -e "/mimic_data_core/admissions.csv" ]; then
   COMPRESSED=0
   EXT='.csv'
 else
-  echo "Unable to find a MIMIC data file (admissions) in /mimic_data/core"
-  echo "Did you map a local directory using `docker run -v /path/to/mimic/data:/mimic_data/core` ?"
+  echo "Unable to find a MIMIC data file (admissions) in /mimic_data_core"
+  echo "Did you map a local directory using `docker run -v /path/to/mimic/data:/mimic_data_core` ?"
   exit 1
 fi
 
@@ -51,32 +48,32 @@ ICUTABLES='chartevents datetimeevents d_items icustays inputevents outputevents 
 
 # CORETABLES check for the table
 for TBL in $CORETABLES; do
-  if [ ! -e "/mimic_data/core/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data_core/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data/core"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data_core"
     exit 1
   fi
-  echo "Found all tables in /mimic_data/core - beginning import from $EXT files."
+  echo "Found all tables in /mimic_data_core - beginning import from $EXT files."
 done
 
 # HOSPTABLES check for the table
 for TBL in $HOSPTABLES; do
-  if [ ! -e "/mimic_data/hosp/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data_hosp/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data/hosp"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data_hosp"
     exit 1
   fi
-  echo "Found all tables in /mimic_data/hosp - beginning import from $EXT files."
+  echo "Found all tables in /mimic_data_hosp - beginning import from $EXT files."
 done
 
 # ICUTABLES check for the table
 for TBL in $ICUTABLES; do
-  if [ ! -e "/mimic_data/icu/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data_icu/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data/icu"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data_icu"
     exit 1
   fi
-  echo "Found all tables in /mimic_data/icu - beginning import from $EXT files."
+  echo "Found all tables in /mimic_data_icu - beginning import from $EXT files."
 done
 
 # checks passed - begin building the database
