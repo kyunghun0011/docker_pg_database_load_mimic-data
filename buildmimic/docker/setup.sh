@@ -43,14 +43,14 @@ fi
 ## core, hosp, icu 테이블 있는지 확인
 # check for all the tables, exit if we are missing any
 
-CORE_TABLES = 'admissions patients transfers'
+CORETABLES='admissions patients transfers'
 
-HOSP_TABLES = 'd_hcpcs diagnoses_icd d_icd_diagnoses d_icd_procedures d_labitems drgcodes emar emar_detail hcpcsevents labevents microbiologyevents pharmacy poe poe_detail prescriptions procedures_icd services'
+HOSPTABLES='d_hcpcs diagnoses_icd d_icd_diagnoses d_icd_procedures d_labitems drgcodes emar emar_detail hcpcsevents labevents microbiologyevents pharmacy poe poe_detail prescriptions procedures_icd services'
 
-ICU_TABLES  = 'chartevents datetimeevents d_items icustays inputevents outputevents procedureevents'
+ICUTABLES='chartevents datetimeevents d_items icustays inputevents outputevents procedureevents'
 
-# CORE_TABLES check for the table
-for TBL in $CORE_TABLES; do
+# CORETABLES check for the table
+for TBL in $CORETABLES; do
   if [ ! -e "/mimic_data/core/${TBL^^}$EXT" ];
   then
     echo "Unable to find ${TBL^^}$EXT in /mimic_data/core"
@@ -59,8 +59,8 @@ for TBL in $CORE_TABLES; do
   echo "Found all tables in /mimic_data/core - beginning import from $EXT files."
 done
 
-# HOSP_TABLES check for the table
-for TBL in $HOSP_TABLES; do
+# HOSPTABLES check for the table
+for TBL in $HOSPTABLES; do
   if [ ! -e "/mimic_data/hosp/${TBL^^}$EXT" ];
   then
     echo "Unable to find ${TBL^^}$EXT in /mimic_data/hosp"
@@ -69,8 +69,8 @@ for TBL in $HOSP_TABLES; do
   echo "Found all tables in /mimic_data/hosp - beginning import from $EXT files."
 done
 
-# ICU_TABLES check for the table
-for TBL in $ICU_TABLES; do
+# ICUTABLES check for the table
+for TBL in $ICUTABLES; do
   if [ ! -e "/mimic_data/icu/${TBL^^}$EXT" ];
   then
     echo "Unable to find ${TBL^^}$EXT in /mimic_data/icu"
