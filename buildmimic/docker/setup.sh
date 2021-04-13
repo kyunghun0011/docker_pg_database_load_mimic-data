@@ -28,15 +28,15 @@ EOSQL
 
 ## 파일 확장자 체크(파일 확장자 csv.gz or csv)
 # check for the admissions to set the extension
-if [ -e "/home/linewalks/mimic-iv-0.4/core/admissions.csv.gz" ]; then
+if [ -e "/mimic_data/core/admissions.csv.gz" ]; then
   COMPRESSED=1
   EXT='.csv.gz'
-elif [ -e "/home/linewalks/mimic-iv-0.4/core/admissions.csv" ]; then
+elif [ -e "/mimic_data/core/admissions.csv" ]; then
   COMPRESSED=0
   EXT='.csv'
 else
-  echo "Unable to find a MIMIC data file (admissions) in /home/linewalks/mimic-iv-0.4/core"
-  echo "Did you map a local directory using `docker run -v /path/to/mimic/data:/home/linewalks/mimic-iv-0.4/core` ?"
+  echo "Unable to find a MIMIC data file (admissions) in /mimic_data/core"
+  echo "Did you map a local directory using `docker run -v /path/to/mimic/data:/mimic_data/core` ?"
   exit 1
 fi
 
@@ -51,32 +51,32 @@ ICU_TABLES  = 'chartevents datetimeevents d_items icustays inputevents outputeve
 
 # CORE_TABLES check for the table
 for TBL in $CORE_TABLES; do
-  if [ ! -e "/home/linewalks/mimic-iv-0.4/core/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data/core/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /home/linewalks/mimic-iv-0.4/core"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data/core"
     exit 1
   fi
-  echo "Found all tables in /home/linewalks/mimic-iv-0.4/core - beginning import from $EXT files."
+  echo "Found all tables in /mimic_data/core - beginning import from $EXT files."
 done
 
 # HOSP_TABLES check for the table
 for TBL in $HOSP_TABLES; do
-  if [ ! -e "/home/linewalks/mimic-iv-0.4/hosp/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data/hosp/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /home/linewalks/mimic-iv-0.4/hosp"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data/hosp"
     exit 1
   fi
-  echo "Found all tables in /home/linewalks/mimic-iv-0.4/hosp - beginning import from $EXT files."
+  echo "Found all tables in /mimic_data/hosp - beginning import from $EXT files."
 done
 
 # ICU_TABLES check for the table
 for TBL in $ICU_TABLES; do
-  if [ ! -e "/home/linewalks/mimic-iv-0.4/icu/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data/icu/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /home/linewalks/mimic-iv-0.4/icu"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data/icu"
     exit 1
   fi
-  echo "Found all tables in /home/linewalks/mimic-iv-0.4/icu - beginning import from $EXT files."
+  echo "Found all tables in /mimic_data/icu - beginning import from $EXT files."
 done
 
 # checks passed - begin building the database
