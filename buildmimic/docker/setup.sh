@@ -20,7 +20,7 @@ psql <<- EOSQL
 
     CREATE DATABASE MIMIC OWNER MIMIC;
     \c mimic;
-    
+
 EOSQL
 
 ## 파일 확장자 체크(파일 확장자 csv.gz or csv)
@@ -40,7 +40,7 @@ fi
 ## core, hosp, icu 테이블 있는지 확인
 # check for all the tables, exit if we are missing any
 
-CORETABLES='admissions patients transfers'
+CORETABLES='testcsv admissions patients transfers'
 
 HOSPTABLES='d_hcpcs diagnoses_icd d_icd_diagnoses d_icd_procedures d_labitems drgcodes emar emar_detail hcpcsevents labevents microbiologyevents pharmacy poe poe_detail prescriptions procedures_icd services'
 
@@ -48,9 +48,9 @@ ICUTABLES='chartevents datetimeevents d_items icustays inputevents outputevents 
 
 # CORETABLES check for the table
 for TBL in $CORETABLES; do
-  if [ ! -e "/mimic_data_core/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data_core/${TBL}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data_core"
+    echo "Unable to find ${TBL}$EXT in /mimic_data_core"
     exit 1
   fi
   echo "Found all tables in /mimic_data_core - beginning import from $EXT files."
@@ -58,9 +58,9 @@ done
 
 # HOSPTABLES check for the table
 for TBL in $HOSPTABLES; do
-  if [ ! -e "/mimic_data_hosp/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data_hosp/${TBL}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data_hosp"
+    echo "Unable to find ${TBL}$EXT in /mimic_data_hosp"
     exit 1
   fi
   echo "Found all tables in /mimic_data_hosp - beginning import from $EXT files."
@@ -68,9 +68,9 @@ done
 
 # ICUTABLES check for the table
 for TBL in $ICUTABLES; do
-  if [ ! -e "/mimic_data_icu/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data_icu/${TBL}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data_icu"
+    echo "Unable to find ${TBL}$EXT in /mimic_data_icu"
     exit 1
   fi
   echo "Found all tables in /mimic_data_icu - beginning import from $EXT files."
