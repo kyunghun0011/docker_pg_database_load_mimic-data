@@ -28,10 +28,10 @@ EOSQL
 
 ## 파일 확장자 체크(파일 확장자 csv.gz or csv)
 # check for the admissions to set the extension
-if [ -e "/mimic_data/admissions.csv.gz" ]; then
+if [ -e "/mimic_data/core/admissions.csv.gz" ]; then
   COMPRESSED=1
   EXT='.csv.gz'
-elif [ -e "/mimic_data/admissions.csv" ]; then
+elif [ -e "/mimic_data/core/admissions.csv" ]; then
   COMPRESSED=0
   EXT='.csv'
 else
@@ -51,9 +51,9 @@ ICU_TABLES  = 'chartevents datetimeevents d_items icustays inputevents outputeve
 
 # CORE_TABLES check for the table
 for TBL in $CORE_TABLES; do
-  if [ ! -e "/mimic_data/${TBL^^}$EXT" ];
+  if [ ! -e "/mimic_data/core/${TBL^^}$EXT" ];
   then
-    echo "Unable to find ${TBL^^}$EXT in /mimic_data"
+    echo "Unable to find ${TBL^^}$EXT in /mimic_data/core"
     exit 1
   fi
   echo "Found all tables in /mimic_data/core - beginning import from $EXT files."
