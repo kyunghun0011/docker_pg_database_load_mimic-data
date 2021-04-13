@@ -15,22 +15,15 @@ pg_ctl -D "$PGDATA" \
 
 psql <<- EOSQL
     CREATE USER MIMIC WITH PASSWORD '$MIMIC_PASSWORD';
-    CREATE USER mimicuser WITH PASSWORD '$MIMIC_PASSWORD';
     
     ALTER USER MIMIC WITH SUPERUSER;
-    
+
     CREATE DATABASE MIMIC OWNER MIMIC;
     \c mimic;
 
-    CREATE SCHEMA mimic_core;
-    ALTER SCHEMA mimic_core OWNER TO mimicuser;
-
-    CREATE SCHEMA mimic_hosp;
-    ALTER SCHEMA mimic_hosp OWNER TO mimicuser;
-
-    CREATE SCHEMA mimic_icu;
-    ALTER SCHEMA mimic_icu OWNER TO mimicuser;
-    
+    CREATE SCHEMA MIMIC_CORE;
+    CREATE SCHEMA MIMIC_HOSP;
+    CREATE SCHEMA MIMIC_ICU;
 EOSQL
 
 ## 파일 확장자 체크(파일 확장자 csv.gz or csv)
