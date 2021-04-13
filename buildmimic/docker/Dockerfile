@@ -1,4 +1,4 @@
-FROM postgres:latest
+FROM postgres:10
 
 # in the docker initialization, we do not build the data
 ENV BUILD_MIMIC 0
