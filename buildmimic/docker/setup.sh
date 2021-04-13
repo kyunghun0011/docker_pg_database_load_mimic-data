@@ -94,10 +94,10 @@ echo '==========================================================================
 # 테이블 적재 스크립트 실행(csv.gz or csv into table)
 if [ $COMPRESSED -eq 1 ]; then
 echo "$0: running load_gz.sql"
-psql "dbname=mimic user='$POSTGRES_USER'" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
+psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
 else
 echo "$0: running load.sql"
-psql "dbname=mimic user='$POSTGRES_USER'" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
+psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
 fi
 
 echo '=============================================================================='
