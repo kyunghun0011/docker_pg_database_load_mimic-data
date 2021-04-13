@@ -40,7 +40,7 @@ fi
 ## core, hosp, icu 테이블 있는지 확인
 # check for all the tables, exit if we are missing any
 
-CORETABLES='testcsv admissions patients transfers'
+CORETABLES='admissions patients transfers'
 
 HOSPTABLES='d_hcpcs diagnoses_icd d_icd_diagnoses d_icd_procedures d_labitems drgcodes emar emar_detail hcpcsevents labevents microbiologyevents pharmacy poe poe_detail prescriptions procedures_icd services'
 
