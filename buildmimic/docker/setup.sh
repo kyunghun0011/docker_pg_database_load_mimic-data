@@ -76,46 +76,43 @@ for TBL in $ICUTABLES; do
   echo "Found all tables in /mimic_data_icu - beginning import from $EXT files."
 done
 
+echo '=============================================================================='
 echo 'Found all tables in /mimic_data_core!'
 echo 'Found all tables in /mimic_data_hosp!'
 echo 'Found all tables in /mimic_data_icu !'
+echo '=============================================================================='
 
 ## 도커 컨테이너 내부 /docker-entrypoint-initdb.d 경로의 스크립트 실행 
 # checks passed - begin building the database
 if [ ${PG_MAJOR:0:1} -eq 1 ]; then
 echo "$0: running create.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
+psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
 fi
+
+echo '=============================================================================='
 
 # 테이블 적재 스크립트 실행(csv.gz or csv into table)
 if [ $COMPRESSED -eq 1 ]; then
 echo "$0: running load_gz.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" -v mimic_data_dir=/mimic_data_hosp < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" -v mimic_data_dir=/mimic_data_icu < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
-
+psql "dbname=mimic user='$POSTGRES_USER'" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
 else
 echo "$0: running load.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" -v mimic_data_dir=/mimic_data_hosp < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" -v mimic_data_dir=/mimic_data_icu < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
+psql "dbname=mimic user='$POSTGRES_USER'" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
 fi
+
+echo '=============================================================================='
 
 # 테이블 인덱스 생성 스크립트 실행
 echo "$0: running postgres_add_indexes.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
+psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
 
+echo '=============================================================================='
 
 # 테이블 제약조건 스크립트 실행
 echo "$0: running postgres_add_constraints.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
-
+psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
 fi
 
-echo 'Done!'
+echo '=============================================================================='
+
+echo 'setup.sh Done!'
