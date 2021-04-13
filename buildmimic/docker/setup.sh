@@ -76,25 +76,30 @@ for TBL in $ICUTABLES; do
   echo "Found all tables in /mimic_data_icu - beginning import from $EXT files."
 done
 
+echo 'Found all tables in /mimic_data_core!'
+echo 'Found all tables in /mimic_data_hosp!'
+echo 'Found all tables in /mimic_data_icu !'
+
+## 도커 컨테이너 내부 /docker-entrypoint-initdb.d 경로의 스크립트 실행 
 # checks passed - begin building the database
-# /docker-entrypoint-initdb.d 경로 안에 있는 테이블 생성 스크립트 실행 
 if [ ${PG_MAJOR:0:1} -eq 1 ]; then
-echo "$0: running postgres_create_tables_pg10.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
-else
-echo "$0: running postgres_create_tables_pg.sql"
+echo "$0: running create.sql"
 psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/create.sql
 fi
 
 # 테이블 적재 스크립트 실행(csv.gz or csv into table)
 if [ $COMPRESSED -eq 1 ]; then
-echo "$0: running postgres_load_data_gz.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
-else
-echo "$0: running postgres_load_data.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
-fi
+echo "$0: running load_gz.sql"
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data_hosp < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data_icu < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
 
+else
+echo "$0: running load.sql"
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data_core < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data_hosp < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" -v mimic_data_dir=/mimic_data_icu < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
+fi
 
 # 테이블 인덱스 생성 스크립트 실행
 echo "$0: running postgres_add_indexes.sql"
