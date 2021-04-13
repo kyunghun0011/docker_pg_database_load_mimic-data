@@ -105,11 +105,16 @@ fi
 
 # 테이블 인덱스 생성 스크립트 실행
 echo "$0: running postgres_add_indexes.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" < /docker-entrypoint-initdb.d/buildmimic/postgres/index.sql
+
 
 # 테이블 제약조건 스크립트 실행
 echo "$0: running postgres_add_constraints.sql"
-psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimiciv" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_core" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_hosp" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
+psql "dbname=mimic user='$POSTGRES_USER' options=--search_path=mimic_icu" < /docker-entrypoint-initdb.d/buildmimic/postgres/constraint.sql
 
 fi
 
