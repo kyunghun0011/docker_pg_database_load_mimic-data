@@ -14,12 +14,12 @@ pg_ctl -D "$PGDATA" \
 	-w start
 
 psql <<- EOSQL
-    CREATE USER MIMIC WITH PASSWORD '$MIMIC_PASSWORD';
+    CREATEUSER -P -s -e -d MIMIC WITH PASSWORD '$MIMIC_PASSWORD';
     
-    ALTER USER MIMIC WITH SUPERUSER;
-
-    CREATE DATABASE MIMIC OWNER MIMIC;
-    \c mimic;
+    CREATE DATABASE MIMIC4 OWNER MIMIC;
+    \c MIMIC4;
+    
+    \q
 
 EOSQL
 
@@ -94,10 +94,11 @@ echo '==========================================================================
 # 테이블 적재 스크립트 실행(csv.gz or csv into table)
 if [ $COMPRESSED -eq 1 ]; then
 echo "$0: running load_gz.sql"
-psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/load_gz.sql
+psql "dbname=mimic user='$POSTGRES_USER'" -v mimic_data_dir_core=/mimic_data_core -v mimic_data_dir_hosp=/mimic_data_hosp -v mimic_data_dir_icu=/mimic_data_icu -v < /docker-entrypoint-initdb.d/buildmimic/postgres/postgres_load_data_gz.sql
+
 else
 echo "$0: running load.sql"
-psql "dbname=mimic user='$POSTGRES_USER'" < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
+psql "dbname=mimic user='$POSTGRES_USER'" -v mimic_data_dir_core=/mimic_data_core -v mimic_data_dir_hosp=/mimic_data_hosp -v mimic_data_dir_icu=/mimic_data_icu -v < /docker-entrypoint-initdb.d/buildmimic/postgres/load.sql
 fi
 
 echo '=============================================================================='
